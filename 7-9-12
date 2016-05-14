@@ -1,0 +1,39 @@
+#lang plai-typed
+
+(define-type Manimal
+  [caml (humps  : number)]
+  [yacc (height : number)])
+
+(define ma1 (caml 2))
+(define ma2 (yacc 1.9))
+
+; with pattern-matching
+(define (good? [ma : Manimal]) : boolean
+  (type-case Manimal ma
+    [caml (hu) (= hu 2)]
+    [yacc (he) (<= he 1.92)]))
+
+; without pattern-matching
+(define (good2? [ma : Manimal]) : boolean
+  (cond
+    [(caml? ma) (>= (caml-humps ma) 2)]
+    [(yacc? ma) (> (yacc-height ma) 2.1)]))
+
+(define (f m)
+  (type-case Manimal m
+    [caml (hu) (* hu 2)]
+    [yacc (he) (* he 2)]))
+
+(test (good? ma1) #t)
+(test (good? ma2) #t)
+
+(test (f ma1) (* 2 2))
+(test (f ma2) (* 1.9 2))
+
+; DO NOW
+
+;(define ma3 (caml "2"))
+;typecheck failed: number vs. string
+
+;(test (good? 1) #t)
+;typecheck failed: Manimal vs. number
